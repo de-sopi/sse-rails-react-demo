@@ -1,0 +1,6 @@
+AllCops:
+  Exclude:
+    - 'config/*'
+
+Style/Documentation:
+  Enabled: false
