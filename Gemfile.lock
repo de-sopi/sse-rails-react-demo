@@ -87,7 +87,6 @@ GEM
     dotenv (3.1.4)
     drb (2.2.1)
     erubi (1.13.0)
-    foreman (0.88.1)
     globalid (1.2.1)
       activesupport (>= 6.1)
     i18n (1.14.6)
@@ -143,6 +142,8 @@ GEM
       nio4r (~> 2.0)
     racc (1.8.1)
     rack (3.1.8)
+    rack-cors (2.0.2)
+      rack (>= 2.0.0)
     rack-session (2.0.0)
       rack (>= 3.0.0)
     rack-test (2.1.0)
@@ -221,11 +222,11 @@ DEPENDENCIES
   bootsnap
   debug
   dotenv
-  foreman
   jbuilder
   jsbundling-rails
   pg (~> 1.5)
   puma (~> 6.0)
+  rack-cors
   rails (~> 7.1)
   sprockets-rails
   tzinfo-data

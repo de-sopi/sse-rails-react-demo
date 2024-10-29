@@ -6,7 +6,5 @@ import App from "./components/app"; // Import the App component which includes y
 
 const root = createRoot(document.getElementById("root"));
 root.render(
-  <BrowserRouter>
     <App />
-  </BrowserRouter>
 );
