@@ -4,8 +4,12 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   root 'home#index'
 
-  get 'very_basic', to: 'very_basic#show'
+  # catch all to not interfere with react router
+  # get '*path', to: 'home#index', constraints: ->(req) { !req.xhr? && req.format.html? }
 
-  get 'messages', to: 'messages#index'
-  post 'message', to: 'messages#create'
+  namespace :api do
+    get 'messages', to: 'messages#index'
+    post 'message', to: 'messages#create'
+    get 'time', to: 'time#show'
+  end
 end

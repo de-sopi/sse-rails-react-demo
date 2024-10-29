@@ -1,17 +1,25 @@
 // app/javascript/components/App.jsx
 import React from 'react';
-import { Routes, Route } from 'react-router-dom';
 import Home from './home';
-import BasicExample from './basic_example';
+import Time from './time';
 import Chatroom from './chatroom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 
-export default () => {
+const App = () => {
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/basic_example" element={<BasicExample />} />
-      <Route path="/chatroom/:chatroomName" element={<Chatroom />} />
-    </Routes>
+    <Router>
+      <div>
+        <nav style={{ display: 'flex', gap: '1rem', padding: '1rem', borderBottom: '1px solid #ddd' }}>
+          <Link to="/">Home</Link>
+          <Link to="/time">First example:</Link>
+        </nav>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/time" element={<Time/>} />
+        </Routes>
+      </div>
+    </Router>
   );
 };
 
+export default App;
