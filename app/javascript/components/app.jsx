@@ -11,7 +11,7 @@ const App = () => {
       <div>
         <nav style={{ display: 'flex', gap: '1rem', padding: '1rem', borderBottom: '1px solid #ddd' }}>
           <Link to="/">Home</Link>
-          <Link to="/time">First example:</Link>
+          <Link to="/time">First example: Get Time from Server</Link>
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />
