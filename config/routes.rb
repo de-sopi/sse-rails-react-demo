@@ -12,4 +12,8 @@ Rails.application.routes.draw do
     post 'message', to: 'messages#create'
     get 'time', to: 'time#show'
   end
+
+  # Catch-all route for front-end routing handled by React Router
+  # This will only apply for HTML requests (not API or assets)
+  get '*path', to: 'home#index', constraints: ->(req) { !req.xhr? && req.format.html? }
 end
