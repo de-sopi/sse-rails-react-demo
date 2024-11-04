@@ -1,28 +1,41 @@
 import { create } from 'zustand';
 
 const useChatStore = create((set) => {
-  let eventSource // eventSource is set in the store but not callable outside this file
-  let messages = []
+  let eventSources = new Map // eventSource is set in the store but not callable outside this file
 
   const connect = (chatroomName) => {
-    if (!eventSource) { // ensure we don't open the same connection twice
-      eventSource = new EventSource(`/api/chatrooms/${chatroomName}`) // connect to the SSE
-      eventSource.onmessage = (message) => {
-        set({ messages: [...messages, JSON.parse(message.data)] })
-      } // decide what to do when we receive a message
-      console.log('connected')
+    // don't create a new connection if we allread listen to the chatroom
+    if(eventSources.hasOwnProperty('key')){
+      console.log('using existing connection')
+      return
     }
+
+    let eventSource = new EventSource(`/api/chatrooms/${chatroomName}`) // connect to the SSE
+    eventSource.onmessage = (message) => {
+      console.log(JSON.parse(message.data))
+        set((state) => ({
+          messages: [...state.messages,  JSON.parse(message.data)]
+        })
+      )// add newItem to the items array
+
+    } // add new message to existing messages
+
+    eventSources[chatroomName] = eventSource
+    console.log('connected')
   }
 
-  const disconnect = () => {
-    if (eventSource == null) { return } // ensure we have a eventSource open
+
+  const disconnect = (chatroomName) => {
+    console.log(eventSources)
+    const eventSource = eventSources[chatroomName]
+    if (eventSource == null) { return } // only disconnect if connection exists
 
     eventSource.close(); // close the connection
-    eventSource = null;
     console.log('disconnected')
   }
-  // provide connect, disconnect and the current time within the hook
+
+  // provide connect, disconnect and the messages within the hook
   return { messages: [], connect, disconnect};
-});
+})
 
 export default useChatStore;

@@ -10,7 +10,7 @@ const Chatrooms = () => {
 
   const navigate = useNavigate()
 
-  const goToNewChatroom = () => { navigate(`${newChatroom}`)}
+  const goToNewChatroom = () => { navigate(`${newChatroom.trim()}`)}
 
   useEffect(() => {
     const fetchChatrooms = async () => {
@@ -36,6 +36,11 @@ const Chatrooms = () => {
   const hasUserName = userName !== ''
   const hasNewChatroom = newChatroom !== ''
 
+  const somethingIsWrong = () => {
+    if(newChatroom.trim() == 'sudo') { return 'this chatroom name is not allowed' }
+    if(chatrooms.includes(newChatroom.trim())) { return 'chatroom with this name already exists' }
+  }
+
   return(
     <div>
       <h1>Enter a chatroom or create a new one</h1>
@@ -47,11 +52,7 @@ const Chatrooms = () => {
             <div>
               <p>create new chatroom </p>
               <input type="text" placeholder="chatroom" value={newChatroom} onChange={updateNewChatroom}/>
-              {hasNewChatroom && (<p>
-                {chatrooms.includes(newChatroom)
-                ? 'chatroom with this name already exists'
-                : <button onClick={goToNewChatroom}>create new chatroom</button>}
-                </p>)}
+              <p>{somethingIsWrong() || <button onClick={goToNewChatroom}>create new chatroom</button>}</p>
             </div>)
           }
         </div>

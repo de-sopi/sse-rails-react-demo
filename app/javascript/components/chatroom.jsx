@@ -21,12 +21,29 @@ const Chatroom = () => {
     setMessage(event.target.value)
   }
 
+  const sendMessage = (async (event) => {
+    if(event.key != 'Enter') { return }
+
+    const response = await fetch(new URL('http://localhost:3000/api/messages'), {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        connection_id: chatroomName,
+        user: localStorage.getItem('userName'),
+        message: message
+      })
+    }).then(() => setMessage(''))
+  })
+
 
   useEffect(() => {
     connect(chatroomName) // open connection when component is rendered
 
     return () => {
-      disconnect() // close the connection when component is not rendered anymore
+      disconnect(chatroomName) // close the connection when component is not rendered anymore
     };
   }, [connect, disconnect])
 
@@ -36,7 +53,7 @@ const Chatroom = () => {
     <div>
       { messages.map((message, index) => <Message key={index} userName={message.user} message={message.message}/>)}
     </div>
-    <input style={newMessageStyle} type='text' placeholder='what do you want to say?' value={message} onChange={updateMessage} />
+    <input style={newMessageStyle} type='text' placeholder='what do you want to say?' value={message} onChange={updateMessage} onKeyPress={sendMessage} />
   </div>
   )
 };

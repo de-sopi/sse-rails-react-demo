@@ -9,34 +9,36 @@ module SseManager
     @chatrooms
   end
 
-  def start_background_thread
+  def self.start_background_thread
     return if @thread&.alive?
 
     @thread = Thread.new do
       conn = ActiveRecord::Base.connection.raw_connection # connect to database
       conn.async_exec('LISTEN chat_messages') # listen to data sent in the chat_messages_channel
 
-      connections ||= []
-      connections << connection_queue.pop until @connection_queue.empty?
-      connections = connections.reject(&:inactive?)
-      @chatrooms = connections.map(:connection_id)
+      connections = []
 
       loop do
         conn.wait_for_notify do |_channel, _pid, payload|
-          message = Message.new(JSON.parse(payload))
+          connections << @connection_queue.pop until @connection_queue.empty?
+          connections = connections.reject(&:inactive?)
+          @chatrooms = connections.map(&:id)
 
-          connections.select { |connection| connection.id == message.connection_id }.each do
-            connection.sse.write({ message: message.message, user: message.user })
-            connection.last_updated = Time.now
-          rescue StandardError
-            connection.sse.close
+          message = Message.new(JSON.parse(payload.to_s))
+
+          connections.select { |connection| connection.id == message.connection_id }.each do |connection|
+            connection.write({ message: message.message, user: message.user })
+          rescue StandardError => e
+            Rails.logger.error e
+            connection.close
+            next
           end
         end
       end
     end
   end
 
-  def add_connection(connection)
+  def self.add_connection(connection)
     return unless connection.is_a?(Connection)
 
     @connection_queue << connection
