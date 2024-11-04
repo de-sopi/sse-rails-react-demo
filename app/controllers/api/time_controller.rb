@@ -12,6 +12,10 @@ module Api
         sse.write(Time.now.strftime('%H:%M:%S')) # get current time and write it to stream
         sleep 1
       end
+    rescue StandardError => e
+      Rails.logger.error 'closed sse due to an error'
+      Rails.logger.error e
+      sse.close
     ensure
       sse.close # make sure we don't have too many connections open (keep this in mind for later)
     end
