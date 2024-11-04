@@ -1,9 +1,10 @@
 // app/javascript/components/App.jsx
-import React from 'react';
-import Home from './home';
-import Time from './time';
-import Chatroom from './chatroom';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import React from 'react'
+import Home from './home'
+import Time from './time'
+import Chatrooms from './chatrooms'
+import Chatroom from './chatroom'
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
 
 const App = () => {
   return (
@@ -12,10 +13,13 @@ const App = () => {
         <nav style={{ display: 'flex', gap: '1rem', padding: '1rem', borderBottom: '1px solid #ddd' }}>
           <Link to="/">Home</Link>
           <Link to="/time">First example: Get Time from Server</Link>
+          <Link to="/chatrooms">Second Example: Chatrooms</Link>
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/time" element={<Time/>} />
+          <Route path="/chatrooms" element={<Chatrooms/>} />
+          <Route path="/chatrooms/:chatroomName" element={<Chatroom/>}/>
         </Routes>
       </div>
     </Router>

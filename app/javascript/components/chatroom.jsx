@@ -1,9 +1,44 @@
 import React from 'react';
 import { useParams } from 'react-router-dom';
+import { chatroomStyle, messagesStyle, newMessageStyle } from '../styles/styles.js'
+import { useState, useEffect } from 'react'
+import useChatStore from '../data/chat_store.js'
+import { Message } from './message.jsx'
 
 const Chatroom = () => {
   const { chatroomName } = useParams();
-  return <h1>Welcome to the Chatroom: {chatroomName}</h1>;
+  const [message, setMessage]  = useState('')
+
+  const connect = useChatStore((state) => state.connect)
+  const disconnect = useChatStore((state) => state.disconnect)
+  const messages = useChatStore((state) => state.messages)
+
+  const currentUser = localStorage.getItem('userName')
+
+  // TODO: redirect unless currentUser
+
+  const updateMessage = (event) => {
+    setMessage(event.target.value)
+  }
+
+
+  useEffect(() => {
+    connect(chatroomName) // open connection when component is rendered
+
+    return () => {
+      disconnect() // close the connection when component is not rendered anymore
+    };
+  }, [connect, disconnect])
+
+  return (
+  <div style={chatroomStyle}>
+    <h1>Welcome to the Chatroom: {chatroomName}</h1>
+    <div>
+      { messages.map((message, index) => <Message key={index} userName={message.user} message={message.message}/>)}
+    </div>
+    <input style={newMessageStyle} type='text' placeholder='what do you want to say?' value={message} onChange={updateMessage} />
+  </div>
+  )
 };
 
 export default Chatroom;
