@@ -2,6 +2,12 @@
 
 module Api
   class MessagesController < ApplicationController
-    def create; end
+    skip_forgery_protection
+
+    def create
+      message = Message.new(params)
+      message.send
+      head :ok
+    end
   end
 end

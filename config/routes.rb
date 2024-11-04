@@ -9,7 +9,7 @@ Rails.application.routes.draw do
 
   namespace :api do
     get 'messages', to: 'messages#index'
-    post 'message', to: 'messages#create'
+    post 'messages', to: 'messages#create'
     get 'time', to: 'time#show'
 
     get 'chatrooms', to: 'chatrooms#index'
