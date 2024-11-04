@@ -5,4 +5,3 @@ Rails.application.configure do
     SseManager.start_background_thread
   end
 end
-
