@@ -1,11 +1,14 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { chatroomStyle, messagesStyle, newMessageStyle } from '../styles/styles.js'
 import { useState, useEffect } from 'react'
 import useChatStore from '../data/chat_store.js'
 import { Message } from './message.jsx'
 
 const Chatroom = () => {
+
+  const currentUser = localStorage.getItem('userName')
+
   const { chatroomName } = useParams();
   const [message, setMessage]  = useState('')
 
@@ -13,9 +16,7 @@ const Chatroom = () => {
   const disconnect = useChatStore((state) => state.disconnect)
   const messages = useChatStore((state) => state.messages)
 
-  const currentUser = localStorage.getItem('userName')
-
-  // TODO: redirect unless currentUser
+  const navigate = useNavigate()
 
   const updateMessage = (event) => {
     setMessage(event.target.value)
@@ -40,12 +41,14 @@ const Chatroom = () => {
 
 
   useEffect(() => {
-    connect(chatroomName) // open connection when component is rendered
+    currentUser ? connect(chatroomName) : navigate('/chatrooms') // open connection when component is rendered if user exists
 
     return () => {
       disconnect(chatroomName) // close the connection when component is not rendered anymore
     };
   }, [connect, disconnect])
+
+
 
   return (
   <div style={chatroomStyle}>

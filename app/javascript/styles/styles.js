@@ -15,11 +15,11 @@ export const chatroomsStyle = {
 }
 
 export const chatroomsIntroStyle = {
-  flex: 1
+  flex: 2
 }
 
 export const chatroomsListStyle = {
-  flex: '0, 0, 200px'
+  flex: 1
 }
 
 export const messageContainerStyle = {

@@ -19,7 +19,7 @@ class Connection
   end
 
   def inactive?
-    stream.closed? || Time.now - @last_updated > 10 * 60 * 60
+    closed? || Time.now - @last_updated > 10 * 60 * 60
   end
 
   def move_to_connection_thread

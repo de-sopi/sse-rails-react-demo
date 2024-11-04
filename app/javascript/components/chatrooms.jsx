@@ -37,8 +37,9 @@ const Chatrooms = () => {
   const hasNewChatroom = newChatroom !== ''
 
   const somethingIsWrong = () => {
+    if(newChatroom === '') { return '' }
     if(newChatroom.trim() == 'sudo') { return 'this chatroom name is not allowed' }
-    if(chatrooms.includes(newChatroom.trim())) { return 'chatroom with this name already exists' }
+    if(chatrooms.includes(newChatroom.trim())) { return 'chatroom with this name already exists, join by double clicking the room on the left' }
   }
 
   return(
@@ -58,7 +59,8 @@ const Chatrooms = () => {
         </div>
         { hasUserName && (
           <div style={chatroomsListStyle}>
-            <ul> {chatrooms.map((item, index) => <li key={index}>{item}</li>)}</ul>
+            <h2>Join Existing Chatrooms</h2>
+            {chatrooms.map((item, index) => <div key={index} onDoubleClick={()=> {navigate(item)}}>{item}</div>)}
           </div>)
         }
       </div>

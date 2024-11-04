@@ -22,7 +22,8 @@ module SseManager
         conn.wait_for_notify do |_channel, _pid, payload|
           connections << @connection_queue.pop until @connection_queue.empty?
           connections = connections.reject(&:inactive?)
-          @chatrooms = connections.map(&:id)
+
+          @chatrooms = chatrooms.intersection(connections.map(&:id))
 
           message = Message.new(JSON.parse(payload.to_s))
 
@@ -41,6 +42,8 @@ module SseManager
   def self.add_connection(connection)
     return unless connection.is_a?(Connection)
 
+
+    @chatrooms << connection.id unless @chatrooms.include?(connection.id)
     @connection_queue << connection
   end
 end
