@@ -8,7 +8,10 @@ module Api
     def show
       response.headers['Content-Type'] = 'text/event-stream' # make sure we provide the right response format
       sse = SSE.new(response.stream, event: 'message') # define the event, most commonly message
-      sse.write(Time.now.strftime('%H:%M:%S')) # get current time and write it to stream
+      loop do
+        sse.write(Time.now.strftime('%H:%M:%S')) # get current time and write it to stream
+        sleep 1
+      end
     ensure
       sse.close # make sure we don't have too many connections open (keep this in mind for later)
     end
