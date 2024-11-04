@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     get 'messages', to: 'messages#index'
     post 'message', to: 'messages#create'
     get 'time', to: 'time#show'
+
+    get 'chatrooms', to: 'chatrooms#index'
+    get 'chatrooms/:chatroom_id', to: 'chatrooms#show'
   end
 
   # Catch-all route for front-end routing handled by React Router
