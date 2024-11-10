@@ -12,7 +12,6 @@ const useChatStore = create((set) => {
 
     let eventSource = new EventSource(`/api/chatrooms/${chatroomName}`) // connect to the SSE
     eventSource.onmessage = (message) => {
-      console.log(JSON.parse(message.data))
         set((state) => ({
           messages: [...state.messages,  JSON.parse(message.data)]
         })

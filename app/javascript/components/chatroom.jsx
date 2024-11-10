@@ -48,8 +48,6 @@ const Chatroom = () => {
     };
   }, [connect, disconnect])
 
-
-
   return (
   <div style={chatroomStyle}>
     <h1>Hi {currentUser}, welcome to the Chatroom {chatroomName}</h1>
