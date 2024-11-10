@@ -26,7 +26,6 @@ const useChatStore = create((set) => {
 
 
   const disconnect = (chatroomName) => {
-    console.log(eventSources)
     const eventSource = eventSources[chatroomName]
     if (eventSource == null) { return } // only disconnect if connection exists
 

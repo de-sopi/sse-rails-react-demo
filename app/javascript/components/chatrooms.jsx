@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 
 const Chatrooms = () => {
   const [chatrooms, setChatrooms] = useState([])
-  const [userName, setUserName] = useState(localStorage.getItem('userName') ?? '')
+  const [userName, setUserName] = useState(sessionStorage.getItem('userName') ?? '')
   const [newChatroom, setNewChatromm] = useState('')
 
   const navigate = useNavigate()
@@ -25,7 +25,7 @@ const Chatrooms = () => {
   },[])
 
   const updateUserName = (event) => {
-    localStorage.setItem('userName', event.target.value ?? '')
+    sessionStorage.setItem('userName', event.target.value ?? '')
     setUserName(event.target.value)
   };
 
@@ -60,7 +60,7 @@ const Chatrooms = () => {
         { hasUserName && (
           <div style={chatroomsListStyle}>
             <h2>Join Existing Chatrooms</h2>
-            {chatrooms.map((item, index) => <div key={index} onDoubleClick={()=> {navigate(item)}}>{item}</div>)}
+            {chatrooms.map((item, index) => <div key={index} onDoubleClick={()=> {navigate(item.toString())}}>{item}</div>)}
           </div>)
         }
       </div>

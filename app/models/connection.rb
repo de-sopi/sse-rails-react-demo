@@ -1,13 +1,14 @@
 # frozen_string_literal: true
 
 class Connection
-  attr_accessor :stream, :id
+  attr_accessor :stream, :id, :user
 
   delegate :close, :closed?, to: :@stream
 
-  def initialize(stream, id)
+  def initialize(stream, id, user)
     @stream = stream
     @id = id
+    @user = user
     @last_updated = Time.now
   end
 

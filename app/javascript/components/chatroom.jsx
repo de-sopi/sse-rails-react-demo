@@ -7,7 +7,7 @@ import { Message } from './message.jsx'
 
 const Chatroom = () => {
 
-  const currentUser = localStorage.getItem('userName')
+  const currentUser = sessionStorage.getItem('userName')
 
   const { chatroomName } = useParams();
   const [message, setMessage]  = useState('')
@@ -33,7 +33,7 @@ const Chatroom = () => {
       },
       body: JSON.stringify({
         connection_id: chatroomName,
-        user: localStorage.getItem('userName'),
+        user: sessionStorage.getItem('userName'),
         message: message
       })
     }).then(() => setMessage(''))
