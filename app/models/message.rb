@@ -13,7 +13,7 @@ class Message
     )
   end
 
-  def initialize(event:, connection_id:, data:)
+  def initialize(event:, data:, connection_id: nil)
     @event = event
     @connection_id = connection_id
     @data = data

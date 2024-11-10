@@ -24,10 +24,15 @@ module SseManager
           connections = connections.reject(&:inactive?)
 
           @chatrooms = chatrooms.intersection(connections.map(&:id))
-
           message = Message.from_json(JSON.parse(payload.to_s))
 
-          connections.select { |connection| connection.id == message.connection_id }.each do |connection|
+          active_connections = if message.connection_id
+                                 connections.select { |conn| conn.id == message.connection_id }
+                               else
+                                 connections
+                               end
+
+          active_connections.each do |connection|
             connection.write(message)
           rescue StandardError => e
             Rails.logger.error e
