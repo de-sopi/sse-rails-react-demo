@@ -28,7 +28,7 @@ module SseManager
           message = Message.new(JSON.parse(payload.to_s))
 
           connections.select { |connection| connection.id == message.connection_id }.each do |connection|
-            connection.write({ message: message.message, user: message.user })
+            connection.write({ message: message.message, user: message.user, time: message.time })
           rescue StandardError => e
             Rails.logger.error e
             connection.close

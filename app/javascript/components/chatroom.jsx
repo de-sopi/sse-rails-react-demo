@@ -52,12 +52,12 @@ const Chatroom = () => {
 
   return (
   <div style={chatroomStyle}>
-    <h1>Welcome to the Chatroom: {chatroomName}</h1>
-    <div>
-      { messages.map((message, index) => <Message key={index} userName={message.user} message={message.message}/>)}
-    </div>
+    <h1>Hi {currentUser}, welcome to the Chatroom {chatroomName}</h1>
     <input style={newMessageStyle} type='text' placeholder='what do you want to say?' value={message} onChange={updateMessage} onKeyPress={sendMessage} />
-  </div>
+    <div>
+      { messages.sort((a, b) => b.time - a.time).map((message, index) => <Message key={index} userName={message.user} message={message.message} index={index}/>)}
+    </div>
+    </div>
   )
 };
 

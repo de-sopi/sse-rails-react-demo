@@ -5,7 +5,7 @@ import { messageContainerStyle, usernameStyle , messageStyle } from '../styles/s
 export const Message = ({userName, message}) => {
   return (
   <div style={messageContainerStyle}>
-    <div style={usernameStyle}>{userName}</div>
+    <div style={usernameStyle(userName)}>{userName}</div>
     <div style={messageStyle}>{message}</div>
   </div>
   )
