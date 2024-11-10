@@ -1,14 +1,22 @@
 # frozen_string_literal: true
 
 class Message
-  attr_accessor :connection_id, :user, :message, :time
+  attr_accessor :connection_id, :data, :event
 
-  def initialize(hash)
-    hash = hash.stringify_keys
-    @connection_id = hash['connection_id']
-    @user = hash['user']
-    @message = hash['message']
-    @time = Time.now.to_i
+  def self.from_json(hash)
+    hash = hash.deep_symbolize_keys
+
+    Message.new(
+      event: hash[:event],
+      connection_id: hash[:connection_id],
+      data: hash[:data]
+    )
+  end
+
+  def initialize(event:, connection_id:, data:)
+    @event = event
+    @connection_id = connection_id
+    @data = data
   end
 
   def send

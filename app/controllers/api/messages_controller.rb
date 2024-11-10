@@ -5,7 +5,13 @@ module Api
     skip_forgery_protection
 
     def create
-      message = Message.new(params)
+      data = {
+        message: params[:message],
+        time: Time.now.to_i,
+        user: params[:user]
+      }
+
+      message = Message.new(event: :message, connection_id: params[:connection_id], data: data)
       message.send
       head :ok
     end

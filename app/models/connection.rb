@@ -13,8 +13,7 @@ class Connection
   end
 
   def write(message)
-    json_data = message.to_json.gsub("\n", '\\n')
-    stream.write("data: #{json_data}\n\n")
+    stream.write("event: #{message.event}\ndata: #{JSON.generate(message.data)}\n\n")
 
     @last_update = Time.now
   end

@@ -25,10 +25,10 @@ module SseManager
 
           @chatrooms = chatrooms.intersection(connections.map(&:id))
 
-          message = Message.new(JSON.parse(payload.to_s))
+          message = Message.from_json(JSON.parse(payload.to_s))
 
           connections.select { |connection| connection.id == message.connection_id }.each do |connection|
-            connection.write({ message: message.message, user: message.user, time: message.time })
+            connection.write(message)
           rescue StandardError => e
             Rails.logger.error e
             connection.close
@@ -41,7 +41,6 @@ module SseManager
 
   def self.add_connection(connection)
     return unless connection.is_a?(Connection)
-
 
     @chatrooms << connection.id unless @chatrooms.include?(connection.id)
     @connection_queue << connection
