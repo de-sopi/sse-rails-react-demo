@@ -25,7 +25,7 @@ export const chatroomsListStyle = {
 export const messageContainerStyle = {
   border: '1px solid black',
   borderRadius: '10px',
-  marginTop: '3px',
+  margin:'3px 10px 3px 10px',
   display: 'flex',
   alignItems: 'flex-start',
 }
@@ -56,7 +56,6 @@ export const messagesStyle = {
 export const newMessageStyle = {
   bottom: 0,
   left: 0,
-  width: '100%',
   padding: '10px',
   margin: '10px'
 }
