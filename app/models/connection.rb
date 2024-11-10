@@ -19,7 +19,8 @@ class Connection
   end
 
   def inactive?
-    closed? || Time.now - @last_updated > 10 * 60 * 60
+    close if Time.now - @last_updated > 10 * 60 * 60
+    closed?
   end
 
   def move_to_connection_thread
