@@ -7,8 +7,7 @@ import { Message } from './message.jsx'
 
 const Chatroom = () => {
 
-  const currentUser = sessionStorage.getItem('userName')
-
+  const [currentUser, setCurrentUser] = useState(sessionStorage.getItem('userName'))
   const { chatroomName } = useParams();
   const [message, setMessage]  = useState('')
 
@@ -39,18 +38,34 @@ const Chatroom = () => {
     }).then(() => setMessage(''))
   })
 
+  const updateUserName = (event) => {
+    if (event.key === 'Enter'){
+      sessionStorage.setItem('userName', event.target.value)
+      setCurrentUser(event.target.value)
+    }
+  }
+
 
   useEffect(() => {
-    currentUser ? connect(chatroomName) : navigate('/chatrooms') // open connection when component is rendered if user exists
+    if(currentUser) { connect(chatroomName) }
 
     return () => {
       disconnect(chatroomName) // close the connection when component is not rendered anymore
     };
-  }, [connect, disconnect])
+  }, [connect, disconnect, currentUser])
+
+  if(currentUser == null) {
+    return (
+      <div style={chatroomStyle}>
+      <h1>Please add username and press enter to join the chatroom {chatroomName}</h1>
+      <input type="text" placeholder="user name" onKeyDown={updateUserName}/>
+      </div>
+    )
+  }
 
   return (
   <div style={chatroomStyle}>
-    <h1>Hi {currentUser}, welcome to the Chatroom {chatroomName}</h1>
+    <h1>Hi {currentUser}, welcome to the chatroom {chatroomName}</h1>
     <input style={newMessageStyle} type='text' placeholder='what do you want to say?' value={message} onChange={updateMessage} onKeyPress={sendMessage} />
     <div>
       { messages.sort((a, b) => b.time - a.time).map((message, index) => <Message key={index} userName={message.user} message={message.message} index={index}/>)}
