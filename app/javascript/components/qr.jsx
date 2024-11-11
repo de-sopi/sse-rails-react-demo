@@ -10,22 +10,22 @@ export const QrCode = () => {
   const holdDuration = 1000
 
   useEffect(() => {
-    let timer;
+    let timer
 
     const handleKeyDown = (event) => {
-      if (event.key === 'q') setIsQPressed(true);
-      if (event.key === 'r') setIsRPressed(true);
-    };
+      if (event.key === 'q') setIsQPressed(true)
+      if (event.key === 'r') setIsRPressed(true)
+    }
 
     const handleKeyUp = (event) => {
-      if (event.key === 'q') setIsQPressed(false);
-      if (event.key === 'r') setIsRPressed(false);
+      if (event.key === 'q') setIsQPressed(false)
+      if (event.key === 'r') setIsRPressed(false)
     }
 
     if (isQPressed && isRPressed) {
       timer = setTimeout(() => {
         setShowQrCode(true)
-      }, holdDuration);
+      }, holdDuration)
     } else {
       clearTimeout(timer)
       setShowQrCode(false)
@@ -40,7 +40,7 @@ export const QrCode = () => {
       document.removeEventListener('keydown', handleKeyDown)
       document.removeEventListener('keyup', handleKeyUp)
       clearTimeout(timer)
-    };
+    }
   }, [isQPressed, isRPressed])
 
   return (
@@ -52,4 +52,4 @@ export const QrCode = () => {
     }
     </div>
   )
-};
+}

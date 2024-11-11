@@ -1,4 +1,4 @@
-import { create } from 'zustand';
+import { create } from 'zustand'
 
 const useChatStore = create((set) => {
   let eventSources = new Map // eventSource is set in the store but not callable outside this file
@@ -28,12 +28,12 @@ const useChatStore = create((set) => {
     const eventSource = eventSources[chatroomName]
     if (eventSource == null) { return } // only disconnect if connection exists
 
-    eventSource.close(); // close the connection
+    eventSource.close() // close the connection
     console.log('disconnected')
   }
 
   // provide connect, disconnect and the messages within the hook
-  return { messages: [], connect, disconnect};
+  return { messages: [], connect, disconnect}
 })
 
-export default useChatStore;
+export default useChatStore

@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 export const timeStyle = {
   marginTop: '50px',
@@ -70,20 +70,20 @@ export const chatroomStyle = {
 }
 
 function fillColor(userName) {
-  let hash = 0;
-    for (let i = 0; i < userName.length; i++) {
-        hash = userName.charCodeAt(i) + ((hash << 5) - hash);
+  let hash = 0
+    for (let i = 0 i < userName.length i++) {
+        hash = userName.charCodeAt(i) + ((hash << 5) - hash)
     }
 
     // Use the hash to generate a hue (0 - 360)
-    const hue = Math.abs(hash) % 360;
+    const hue = Math.abs(hash) % 360
 
     // Set saturation and lightness to fixed values for more consistent, visually distinct colors
-    const saturation = 30; // 60% saturation
-    const lightness = 50;  // 70% lightness
+    const saturation = 30 // 60% saturation
+    const lightness = 50  // 70% lightness
 
     // Return HSL color string
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`
 }
 
 

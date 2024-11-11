@@ -52,7 +52,7 @@ const Chatroom = () => {
 
     return () => {
       disconnect(chatroomName) // close the connection when component is not rendered anymore
-    };
+    }
   }, [connect, disconnect, currentUser])
 
   if(currentUser == null) {
@@ -74,6 +74,6 @@ const Chatroom = () => {
     </div>
   </div>
   )
-};
+}
 
-export default Chatroom;
+export default Chatroom

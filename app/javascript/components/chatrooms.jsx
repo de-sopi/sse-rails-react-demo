@@ -27,11 +27,11 @@ const Chatrooms = () => {
   const updateUserName = (event) => {
     sessionStorage.setItem('userName', event.target.value ?? '')
     setUserName(event.target.value)
-  };
+  }
 
   const updateNewChatroom = (event) => {
     setNewChatromm(event.target.value)
-  };
+  }
 
   const hasUserName = userName !== ''
   const hasNewChatroom = newChatroom !== ''
@@ -66,6 +66,6 @@ const Chatrooms = () => {
       </div>
     </div>
   )
-};
+}
 
-export default Chatrooms;
+export default Chatrooms

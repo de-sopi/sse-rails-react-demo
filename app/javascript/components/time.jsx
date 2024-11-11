@@ -1,5 +1,5 @@
-import React from 'react';
-import { useEffect } from 'react';
+import React from 'react'
+import { useEffect } from 'react'
 import useTimeStore from '../data/time_store.js'
 import { timeStyle } from '../styles/styles.js'
 
@@ -13,11 +13,11 @@ const Time = () => {
 
     return () => {
       disconnect() // close the connection when component is not rendered anymore
-    };
+    }
   }, [connect, disconnect])
 
 
   return <div style={timeStyle}>{currentTime}</div>
-};
+}
 
-export default Time;
+export default Time
