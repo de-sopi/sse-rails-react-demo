@@ -49,6 +49,7 @@ const Chatroom = () => {
 
   useEffect(() => {
     if(currentUser) { connect(chatroomName) }
+    window.addEventListener('beforeunload',disconnect)
 
     return () => {
       disconnect(chatroomName) // close the connection when component is not rendered anymore

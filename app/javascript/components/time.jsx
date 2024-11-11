@@ -11,6 +11,7 @@ const Time = () => {
   useEffect(() => {
     connect() // open connection when component is rendered
 
+    window.addEventListener('beforeunload', disconnect)
     return () => {
       disconnect() // close the connection when component is not rendered anymore
     }
