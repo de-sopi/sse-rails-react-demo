@@ -71,7 +71,7 @@ export const chatroomStyle = {
 
 function fillColor(userName) {
   let hash = 0
-    for (let i = 0 i < userName.length i++) {
+    for (let i = 0; i < userName.length; i++) {
         hash = userName.charCodeAt(i) + ((hash << 5) - hash)
     }
 
