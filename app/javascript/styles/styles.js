@@ -79,8 +79,8 @@ function fillColor(userName) {
     const hue = Math.abs(hash) % 360
 
     // Set saturation and lightness to fixed values for more consistent, visually distinct colors
-    const saturation = 30 // 60% saturation
-    const lightness = 50  // 70% lightness
+    const saturation = 30 // 30% saturation
+    const lightness = 60  // 60% lightness
 
     // Return HSL color string
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`
