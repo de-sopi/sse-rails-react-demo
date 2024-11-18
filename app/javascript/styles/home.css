@@ -1,0 +1,32 @@
+.homediv{
+  margin-left: 20px;
+}
+
+.question-div{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+}
+
+.question-div h3:nth-child(1){
+  padding-left: 5%;
+}
+.question-div h3:nth-child(2){
+  padding-left: 10%;
+}
+.question-div h3:nth-child(3){
+  padding-left: 15%;
+}
+.question-div h3:nth-child(4){
+  padding-left: 20%;
+}
+.question-div h3:nth-child(5){
+  padding-left: 25%;
+}
+
+
+h3{
+  font-weight: normal;
+}
+

@@ -47,7 +47,7 @@ export const QrCode = () => {
     <div>
     {
       showQrCode && (
-        <QRCodeSVG value={window.location.href} />
+        <QRCodeSVG value={window.location.href} height='250px' width='250px' />
       )
     }
     </div>

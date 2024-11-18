@@ -1,7 +1,7 @@
 import React from 'react'
 import { useEffect } from 'react'
 import useTimeStore from '../data/time_store.js'
-import { timeStyle } from '../styles/styles.js'
+import '../styles/time.css'
 
 const Time = () => {
   const connect = useTimeStore((state) => state.connect)
@@ -18,7 +18,7 @@ const Time = () => {
   }, [connect, disconnect])
 
 
-  return <div style={timeStyle}>{currentTime}</div>
+  return <div className={'time'}>{currentTime}</div>
 }
 
 export default Time

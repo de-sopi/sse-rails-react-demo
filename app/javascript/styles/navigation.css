@@ -1,0 +1,23 @@
+.navbar {
+  display: flex;
+  padding-left: 3%;
+  padding-right: 3%;
+  border-bottom: 1px solid #ddd;
+  background-color: royalblue;
+  justify-content: space-between;
+  height: 60px
+}
+
+.navlink {
+  color: white;;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.navlink:hover {
+  background-color:blue
+}

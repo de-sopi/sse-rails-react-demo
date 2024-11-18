@@ -5,15 +5,17 @@ import Time from './time'
 import Chatrooms from './chatrooms'
 import Chatroom from './chatroom'
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom'
+import '../styles/global_styles.css'
+import '../styles/navigation.css'
 
 const App = () => {
   return (
     <Router>
       <div>
-        <nav style={{ display: 'flex', gap: '1rem', padding: '1rem', borderBottom: '1px solid #ddd' }}>
-          <Link to="/">Home</Link>
-          <Link to="/time">First example: Get Time from Server</Link>
-          <Link to="/chatrooms">Second Example: Chatrooms</Link>
+        <nav className={'navbar'}>
+          <Link to="/" className={'navlink'}>Home</Link>
+          <Link to="/time" className={'navlink'}>Example 1: Server Sends Time</Link>
+          <Link to="/chatrooms" className={'navlink'}>Example 2: Server Sends Chat Messages</Link>
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />

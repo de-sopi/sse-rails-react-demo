@@ -1,31 +1,9 @@
 import React from 'react'
 
-export const timeStyle = {
-  marginTop: '50px',
-  width: '100%',
-  display: 'flex',
-  justifyContent: 'center',
-  fontSize: '100px',
-  fontWeight: 'bold'
-}
-
-export const chatroomsStyle = {
-  display: 'flex',
-  alignItems: 'flex-start'
-}
-
-export const chatroomsIntroStyle = {
-  flex: 2
-}
-
-export const chatroomsListStyle = {
-  flex: 1
-}
-
 export const messageContainerStyle = {
   border: '1px solid black',
   borderRadius: '10px',
-  margin:'3px 10px 3px 10px',
+  marginTop: '5px',
   display: 'flex',
   alignItems: 'flex-start',
 }
@@ -46,29 +24,6 @@ export const messageStyle = {
   flex: 4
 }
 
-export const messagesStyle = {
-  flex: 1,
-  overflowY: 'scroll',
-  overflowX: 'hidden',
-  height: '100%'
-}
-
-export const newMessageStyle = {
-  bottom: 0,
-  left: 0,
-  padding: '10px',
-  margin: '10px'
-}
-
-export const chatroomStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-}
-
 function fillColor(userName) {
   let hash = 0
     for (let i = 0; i < userName.length; i++) {
@@ -85,8 +40,3 @@ function fillColor(userName) {
     // Return HSL color string
     return `hsl(${hue}, ${saturation}%, ${lightness}%)`
 }
-
-
-
-
-

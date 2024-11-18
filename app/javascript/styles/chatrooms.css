@@ -1,0 +1,12 @@
+.chatrooms {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chatrooms-intro {
+  width: 40%;
+}
+
+.chatrooms-list {
+  width: 40%;
+}

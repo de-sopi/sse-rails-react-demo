@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { messageContainerStyle, usernameStyle , messageStyle } from '../styles/styles.js'
+import { messageContainerStyle, usernameStyle , messageStyle } from '../styles/message_style.js'
 
 export const Message = ({userName, message}) => {
   return (

@@ -1,0 +1,9 @@
+.time {
+  margin-top: 50px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  font-size: 100px;
+  font-weight: bold;
+}
+

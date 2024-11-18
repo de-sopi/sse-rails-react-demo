@@ -1,7 +1,9 @@
 import React from 'react'
 import { useEffect, useState } from 'react'
-import { chatroomsStyle, chatroomsIntroStyle, chatroomsListStyle } from '../styles/styles.js'
 import { useNavigate } from 'react-router-dom'
+import { ConfirmableTextInput} from './confirmable_text_input'
+import '../styles/chatrooms.css'
+import '../styles/confirmable_text_input.css'
 
 const Chatrooms = () => {
   const [chatrooms, setChatrooms] = useState([])
@@ -43,22 +45,22 @@ const Chatrooms = () => {
   }
 
   return(
-    <div>
+    <div style={{margin: '10px'}}>
       <h1>Enter a chatroom or create a new one</h1>
-      <div style={chatroomsStyle}>
-        <div style={chatroomsIntroStyle}>
+      <div className='chatrooms'>
+        <div className='chatrooms-intro'>
           <p>first, choose your user name </p>
           <input type="text" placeholder="user name" value={userName} onChange={updateUserName}/>
           {hasUserName && (
             <div>
               <p>create new chatroom </p>
               <input type="text" placeholder="chatroom" value={newChatroom} onChange={updateNewChatroom}/>
-              <p>{somethingIsWrong() || <button onClick={goToNewChatroom}>create new chatroom</button>}</p>
+              <p>{somethingIsWrong() || <button className='input-confirm-button' onClick={goToNewChatroom}>create new chatroom</button>}</p>
             </div>)
           }
         </div>
         { hasUserName && (
-          <div style={chatroomsListStyle}>
+          <div className='chatrooms-list'>
             <h2>Join Existing Chatrooms</h2>
             {chatrooms.map((item, index) => <div key={index} onDoubleClick={()=> {navigate(item.toString())}}>{item}</div>)}
           </div>)
