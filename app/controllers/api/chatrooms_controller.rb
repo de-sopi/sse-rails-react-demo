@@ -17,7 +17,7 @@ module Api
       stream = request.env['rack.hijack_io']
 
       send_headers(stream)
-      connection = Connection.new(stream, chatroom_id, session['userName'])
+      connection = Connection.new(stream, chatroom_id)
       connection.move_to_connection_thread
       head :ok
     end

@@ -5,25 +5,24 @@ class Connection
 
   delegate :close, :closed?, to: :@stream
 
-  def initialize(stream, id, user)
+  def initialize(stream, id)
     @stream = stream
     @id = id
-    @user = user
-    @last_updated = Time.now
   end
 
   def write(message)
+    return if closed?
+
     stream.write("event: #{message.event}\ndata: #{JSON.generate(message.data)}\n\n")
-
-    @last_update = Time.now
-  end
-
-  def inactive?
-    close if Time.now - @last_updated > 10 * 60 * 60
-    closed?
+  rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
+    close
   end
 
   def move_to_connection_thread
     SseManager.add_connection(self)
+  end
+
+  def check_if_alive
+    stream.write("event: heartbeat\ndata:alive\n\n")
   end
 end

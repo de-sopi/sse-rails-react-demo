@@ -19,24 +19,22 @@ module SseManager
       connections = []
 
       loop do
-        conn.wait_for_notify do |_channel, _pid, payload|
-          connections << @connection_queue.pop until @connection_queue.empty?
-          connections = connections.reject(&:inactive?)
+        connections << @connection_queue.pop until @connection_queue.empty?
+        connections.each do |connection|
+          connection.check_if_alive
+        rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
+          connection.close
+        end
+        connections.reject!(&:closed?)
 
-          @chatrooms = chatrooms.intersection(connections.map(&:id))
+        @chatrooms = chatrooms.intersection(connections.map(&:id))
+        conn.wait_for_notify(30) do |_channel, _pid, payload|
           message = Message.from_json(JSON.parse(payload.to_s))
+          Rails.logger.info message
 
-          active_connections = if message.connection_id
-                                 connections.select { |conn| conn.id == message.connection_id }
-                               else
-                                 connections
-                               end
-
-          active_connections.each do |connection|
-            connection.write(message)
-          rescue StandardError => e
-            Rails.logger.error e
-            connection.close
+          connections.each do |connection|
+            connection.write(message) if message.connection_id == connection.id || message.connection_id.nil?
+          rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
             next
           end
         end
@@ -49,5 +47,15 @@ module SseManager
 
     @chatrooms << connection.id unless @chatrooms.include?(connection.id)
     @connection_queue << connection
+  end
+
+  def self.prepare_connections(connections)
+    connections << @connection_queue.pop until @connection_queue.empty?
+    connections.each(&:check_if_alive)
+    connections.reject!(&:closed?)
+
+    @chatrooms = chatrooms.intersection(connections.map(&:id))
+
+    connections
   end
 end
