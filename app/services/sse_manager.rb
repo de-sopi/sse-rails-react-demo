@@ -9,9 +9,7 @@ module SseManager
     @chatrooms
   end
 
-  def self.start_background_thread
-    return if @thread&.alive?
-
+  def self.start_thread
     @thread = Thread.new do
       conn = ActiveRecord::Base.connection.raw_connection # connect to database
       conn.async_exec('LISTEN chat_messages') # listen to data sent in the chat_messages_channel
@@ -28,7 +26,10 @@ module SseManager
         connections.reject!(&:closed?)
 
         @chatrooms = chatrooms.intersection(connections.map(&:id))
-        conn.wait_for_notify(30) do |_channel, _pid, payload|
+        pp chatrooms
+        Thread.exit if connections.empty?
+
+        conn.wait_for_notify(10) do |_channel, _pid, payload|
           message = Message.from_json(JSON.parse(payload.to_s))
           Rails.logger.info message
 
@@ -44,6 +45,8 @@ module SseManager
 
   def self.add_connection(connection)
     return unless connection.is_a?(Connection)
+
+    self.start_thread unless @thread&.alive?
 
     @chatrooms << connection.id unless @chatrooms.include?(connection.id)
     @connection_queue << connection
