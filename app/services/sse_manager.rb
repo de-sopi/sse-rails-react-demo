@@ -28,7 +28,7 @@ module SseManager
         @chatrooms = chatrooms.intersection(connections.map(&:id))
         Thread.exit if connections.empty?
 
-        conn.wait_for_notify(10) do |_channel, _pid, payload|
+        conn.wait_for_notify(30) do |_channel, _pid, payload|
           message = Message.from_json(JSON.parse(payload.to_s))
           Rails.logger.info message
 
