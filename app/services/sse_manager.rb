@@ -26,7 +26,6 @@ module SseManager
         connections.reject!(&:closed?)
 
         @chatrooms = chatrooms.intersection(connections.map(&:id))
-        pp chatrooms
         Thread.exit if connections.empty?
 
         conn.wait_for_notify(10) do |_channel, _pid, payload|
