@@ -15,19 +15,23 @@ module SseManager
       conn.async_exec('LISTEN chat_messages') # listen to data sent in the chat_messages_channel
 
       connections = []
+      send_heartbeat = false
 
       loop do
         connections << @connection_queue.pop until @connection_queue.empty?
-        connections.each do |connection|
-          connection.check_if_alive
-        rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
-          connection.close
+        if send_heartbeat
+          connections.each do |connection|
+            connection.check_if_alive
+          rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
+            connection.close
+          end
         end
         connections.reject!(&:closed?)
 
         @chatrooms = chatrooms.intersection(connections.map(&:id))
         Thread.exit if connections.empty?
 
+        send_heartbeat = true
         conn.wait_for_notify(30) do |_channel, _pid, payload|
           message = Message.from_json(JSON.parse(payload.to_s))
           Rails.logger.info message
@@ -37,6 +41,7 @@ module SseManager
           rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
             next
           end
+          send_heartbeat = false
         end
       end
     end
@@ -47,6 +52,7 @@ module SseManager
 
     self.start_thread unless @thread&.alive?
 
+    Message.new(connection_id: connection.id, event: 'connection established', data: 'welcome!').send
     @chatrooms << connection.id unless @chatrooms.include?(connection.id)
     @connection_queue << connection
   end
