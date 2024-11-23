@@ -7,7 +7,7 @@ module Api
     include SseManager
 
     def index
-      render json: SseManager.chatrooms
+      render json: SseManager.active_connection_ids
     end
 
     def show
