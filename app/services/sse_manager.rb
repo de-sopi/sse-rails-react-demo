@@ -9,7 +9,7 @@ module SseManager
     @active_connection_ids
   end
 
-  def self.start_thread # rubocop:disable Metrics/MethodLength
+  def self.start_thread
     @thread = Thread.new do
       conn = ActiveRecord::Base.connection.raw_connection # connect to database
       conn.async_exec('LISTEN chat_messages') # listen to data sent in the chat_messages_channel
@@ -24,10 +24,9 @@ module SseManager
 
         # 2. process pg noticifactions
         # returns the channel name if message received within timeout, else nil
-        skip_heartbeat = conn.wait_for_notify(30) do |_channel, _pid, payload|
+        conn.wait_for_notify(30) do |_channel, _pid, payload|
           message = Message.from_json(JSON.parse(payload.to_s))
-
-          connections = connections.select {|c| message.connection_id == c.id } unless message.connection_id.nil?
+          connections = connections.select { |c| message.connection_id == c.id } unless message.connection_id.nil?
 
           connections.each do |connection|
             connection.write(message)
@@ -35,12 +34,8 @@ module SseManager
             connection.close
             next
           end
-        end
-
-        # 3. if no message came through, check if any connections have been disconnected
-        next if skip_heartbeat
-
-        connections.each do |connection|
+          # 3. if no message came through, check if any connections have been disconnected
+        end || connections.each do |connection|
           connection.check_if_alive
         rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
           connection.close
