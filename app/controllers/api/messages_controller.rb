@@ -11,7 +11,7 @@ module Api
         user: params[:user]
       }
 
-      message = Message.new(event: :message, connection_id: params[:connection_id], data: data)
+      message = Message.new(event: :chat_message, connection_id: params[:connection_id], data: data)
       message.send
       head :ok
     end
