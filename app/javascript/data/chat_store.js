@@ -1,23 +1,41 @@
 import { create } from 'zustand'
 
-const useChatStore = create((set) => {
-  let eventSources = new Map // eventSource is set in the store but not callable outside this file
+const useChatStore = create((set, get) => {
+  let eventSources = new Map() // eventSource is set in the store but not callable outside this file
+  let messages = new Map()
 
   const connect = (chatroomName) => {
+    const messages = { ...get().messages };
+    const eventSources = { ...get().eventSources };
+
+
+
+
+
+
     // don't create a new connection if we allread listen to the chatroom
-    if(eventSources.hasOwnProperty('key')){
-      console.log('using existing connection')
+    if (useChatroomsStore.state.getChatroom(chatroomName)){
       return
     }
 
-    let eventSource = new EventSource(`/api/chatrooms/${chatroomName}`) // connect to the SSE
-    eventSource.onmessage = (message) => {
-        set((state) => ({
-          messages: [...state.messages,  JSON.parse(message.data)]
-        })
-      )// add newItem to the items array
+    set((state) => {
+      const currentMessages = state.messages
+      currentMessages[chatroomName] = []
 
-    } // add new message to existing messages
+      return { messages: currentMessages }
+    })
+
+    let eventSource = new EventSource(`/api/chatrooms/${chatroomName}`)
+    eventSource.addEventListener('chat_message', (event) => {
+      const parsedData = JSON.parse(event.data)
+      set((state) => ({
+        messages: {
+          ...state.messages,
+            // add new message
+          [chatroomName]: [...(state.messages[chatroomName] || []), parsedData],
+        },
+      }))
+    })
 
     eventSources[chatroomName] = eventSource
     console.log('connected')
@@ -33,7 +51,34 @@ const useChatStore = create((set) => {
   }
 
   // provide connect, disconnect and the messages within the hook
-  return { messages: [], connect, disconnect}
+  return { messages: new Map(), connect, disconnect}
 })
 
 export default useChatStore
+
+
+const useChatroomsStore = create((set, get) => ({
+  chatrooms: new Map(), // A Map to store chatroom stores by their ID
+
+  // Create a new chatroom store
+  createChatroom: (id) => {
+    const chatrooms = new Map(get().chatrooms) // Clone the existing map
+    if (!chatrooms.has(id)) {
+      const newChatroom = createChatroomStore(id) // Create a new chatroom store
+      chatrooms.set(id, newChatroom) // Add it to the map
+      set({ chatrooms }) // Update the state
+    }
+  },
+
+  // Get an existing chatroom store by ID
+  getChatroom: (id) => get().chatrooms.get(id),
+
+  // Delete a chatroom store by ID
+  deleteChatroom: (id) => {
+    const chatrooms = new Map(get().chatrooms) // Clone the existing map
+    if (chatrooms.has(id)) {
+      chatrooms.delete(id) // Remove the chatroom from the map
+      set({ chatrooms }) // Update the state
+    }
+  }
+}))

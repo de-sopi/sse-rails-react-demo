@@ -1,7 +1,6 @@
 import React from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
-import useChatStore from '../data/chat_store.js'
 import { Message } from './message.jsx'
 import  { QrCode }  from './qr.jsx'
 import { ConfirmableTextInput } from './confirmable_text_input.jsx'
@@ -10,16 +9,9 @@ import '../styles/chatroom.css'
 const Chatroom = () => {
   const [currentUser, setCurrentUser] = useState(sessionStorage.getItem('userName'))
   const { chatroomName } = useParams()
-
-  const connect = useChatStore((state) => state.connect)
-  const disconnect = useChatStore((state) => state.disconnect)
-  const messages = useChatStore((state) => state.messages)
+  const [ messages, setMessages ] = useState([])
 
   const navigate = useNavigate()
-
-  const updateMessage = (event) => {
-    setMessage(event.target.value)
-  }
 
   const sendMessage = (async (message) => {
     if(message === ''|| message === null) {
@@ -40,19 +32,26 @@ const Chatroom = () => {
     })
   })
 
+  const prependMessage = (data) => {
+    setMessages([data, ...messages])
+  }
+
   const updateUserName = (newUsername) => {
     sessionStorage.setItem('userName', newUsername)
     setCurrentUser(newUsername)
   }
 
   useEffect(() => {
-    if(currentUser) { connect(chatroomName) }
-    window.addEventListener('beforeunload',disconnect)
-
-    return () => {
-      disconnect(chatroomName) // close the connection when component is not rendered anymore
+    if(currentUser) {
+      const eventSource = new EventSource(`/api/chatrooms/${chatroomName}`)
+      eventSource.addEventListener('chat_message', (event) => {
+        setMessages((previousMessages) => [JSON.parse(event.data), ...previousMessages])
+      })
+      eventSource.onerror = (err) => {
+        console.log(err.message)
+      }
     }
-  }, [connect, disconnect, currentUser])
+  }, [currentUser])
 
   if(currentUser == null) {
     return (
@@ -69,7 +68,9 @@ const Chatroom = () => {
     <QrCode/>
     <ConfirmableTextInput confirm={sendMessage} buttonText={'send'}/>
     <div>
-      { messages.sort((a, b) => b.time - a.time).map((message, index) => <Message key={index} userName={message.user} message={message.message} index={index}/>)}
+      { messages.map((message, index) =>
+        <Message key={index} userName={message.user} message={message.message} index={index}/>)
+      }
     </div>
   </div>
   )
