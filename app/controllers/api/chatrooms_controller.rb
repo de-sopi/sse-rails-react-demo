@@ -4,7 +4,6 @@
 # i will apply a full rack hijack in this example, for differences to partial hijack check the above link
 module Api
   class ChatroomsController < ApplicationController
-    include SseManager
 
     def index
       render json: SseManager.active_connection_ids

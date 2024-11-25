@@ -1,15 +1,29 @@
 # frozen_string_literal: true
 
-module SseManager
-  @connection_queue = Queue.new
-  @thread = nil
-  @active_connection_ids = []
+class SseManager
+  private_class_method :new
+  attr_reader :active_connection_ids, :connection_queue
 
-  def self.active_connection_ids
-    @active_connection_ids
+  @instance_mutex = Mutex.new
+
+  def self.instance
+    @instance_mutex.synchronize do
+      @instance ||= new
+    end
   end
 
-  def self.start_thread
+  def self.add_connection(connection)
+    return unless connection.is_a?(Connection)
+
+    instance.start_thread unless @thread.present? && @thread.alive?
+    instance.connection_queue << connection
+  end
+
+  def self.active_connection_ids
+    instance.active_connection_ids
+  end
+
+  def start_thread
     @thread = Thread.new do
       conn = ActiveRecord::Base.connection.raw_connection # connect to database
       conn.async_exec('LISTEN chat_messages') # listen to data sent in the chat_messages_channel
@@ -19,14 +33,13 @@ module SseManager
       loop do
         # 1) ensure connections are added and cleaned up
         connections = prepare_connections(connections)
-        @active_connection_ids = connections.map(&:id)
-        Thread.exit if connections.empty?
+        @active_connection_ids = connections.map(&:id).uniq
+        #@thread.exit if connections.empty?
 
         # 2. process pg noticifactions
         # returns the channel name if message received within timeout, else nil
         conn.wait_for_notify(30) do |_channel, _pid, payload|
           message = Message.from_json(JSON.parse(payload.to_s))
-          connections = connections.select { |c| message.connection_id == c.id } unless message.connection_id.nil?
 
           connections.each do |connection|
             connection.write(message)
@@ -39,20 +52,25 @@ module SseManager
           connection.check_if_alive
         rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
           connection.close
+          next
         end
       end
     end
   end
 
-  def self.add_connection(connection)
-    return unless connection.is_a?(Connection)
+  private
 
-    start_thread unless @thread&.alive?
-    @connection_queue << connection
+  def initialize
+    @connection_queue = Queue.new
+    @thread = nil
+    @active_connection_ids = []
   end
 
-  def self.prepare_connections(connections)
-    connections << @connection_queue.pop until @connection_queue.empty?
+  def prepare_connections(connections)
+    if connection_queue.size.positive? # rubocop:disable Style/IfUnlessModifier
+      connections << @connection_queue.pop until @connection_queue.empty?
+    end
+
     connections.reject!(&:closed?)
 
     connections

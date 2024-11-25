@@ -12,10 +12,9 @@ class Connection
 
   def write(message)
     return if closed?
+    return if message.connection_id.present? && message.connection_id != id
 
     stream.write("event: #{message.event}\ndata: #{JSON.generate(message.data)}\n\n")
-  rescue IOError, SocketError, Errno::EPIPE, Errno::ECONNRESET
-    close
   end
 
   def move_to_connection_thread
