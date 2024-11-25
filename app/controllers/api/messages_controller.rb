@@ -11,8 +11,8 @@ module Api
         user: params[:user]
       }
 
-      message = Message.new(event: :chat_message, connection_id: params[:connection_id], data: data)
-      message.send
+      event = RailsSseManager::Event.new(event: :chat_message, connection_id: params[:connection_id], data: data)
+      event.send
       head :ok
     end
   end
