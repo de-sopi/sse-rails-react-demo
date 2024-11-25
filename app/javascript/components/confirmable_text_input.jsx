@@ -19,7 +19,7 @@ export const ConfirmableTextInput = ({confirm, buttonText }) => {
 
   return (
     <div className='new-input'>
-    <input className='input-text' type="text" placeholder="user name" ref={inputRef} onKeyDown={handleKeyDown}/>
+    <input className='input-text' type="text" placeholder="what's on your mind" ref={inputRef} onKeyDown={handleKeyDown}/>
     <button className='input-confirm-button' onClick={callConfirm}>{buttonText}</button>
   </div>
   )
