@@ -2,7 +2,7 @@ import React from 'react'
 import { useRef } from 'react'
 import '../styles/confirmable_text_input.css'
 
-export const ConfirmableTextInput = ({confirm, buttonText }) => {
+export const ConfirmableTextInput = ({confirm, buttonText, confirmText }) => {
   const inputRef = useRef('')
 
   const callConfirm = () => {
@@ -19,7 +19,7 @@ export const ConfirmableTextInput = ({confirm, buttonText }) => {
 
   return (
     <div className='new-input'>
-    <input className='input-text' type="text" placeholder="what's on your mind" ref={inputRef} onKeyDown={handleKeyDown}/>
+    <input className='input-text' type="text" placeholder={`${confirmText}`} ref={inputRef} onKeyDown={handleKeyDown}/>
     <button className='input-confirm-button' onClick={callConfirm}>{buttonText}</button>
   </div>
   )

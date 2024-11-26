@@ -57,7 +57,7 @@ const Chatroom = () => {
     return (
       <div className='chatroom'>
         <h1>Please add username and press enter to join the chatroom {chatroomName}</h1>
-        <ConfirmableTextInput confirm={updateUserName} buttonText={'confirm'}/>
+        <ConfirmableTextInput confirm={updateUserName} buttonText={'confirm'} confirmText={'user name'}/>
       </div>
     )
   }
@@ -66,7 +66,7 @@ const Chatroom = () => {
   <div className='chatroom'>
     <h1>Hi {currentUser}, welcome to the chatroom {chatroomName}</h1>
     <QrCode/>
-    <ConfirmableTextInput confirm={sendMessage} buttonText={'send'}/>
+    <ConfirmableTextInput confirm={sendMessage} buttonText={'send'} confirmText={"what's on your mind"}/>
     <div>
       { messages.map((message, index) =>
         <Message key={index} userName={message.user} message={message.message} index={index}/>)
