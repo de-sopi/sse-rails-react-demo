@@ -16,7 +16,7 @@ const Chatrooms = () => {
 
   useEffect(() => {
     const fetchChatrooms = async () => {
-      const response = await fetch(new URL(`${window.location.host}/api/chatrooms`))
+      const response = await fetch(new URL(`${window.location.protocol + "//" + window.location.host}/api/chatrooms`))
       if(!response.ok) {
         return
       }
