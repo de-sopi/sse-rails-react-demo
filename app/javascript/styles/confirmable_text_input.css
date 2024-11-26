@@ -5,12 +5,13 @@
 }
 
 .input-text{
-  flex: 6
+  width: 70%;
 }
 
 .input-confirm-button {
   flex: 1;
   background-color: royalblue;
   color: white;
-  margin-left: 10px;
+  width: 20%;
+  margin-left: 20px;
 }

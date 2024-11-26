@@ -1,11 +1,11 @@
 .navbar {
+  min-height: 60px;
   display: flex;
   padding-left: 3%;
   padding-right: 3%;
   border-bottom: 1px solid #ddd;
   background-color: royalblue;
   justify-content: space-between;
-  height: 60px
 }
 
 .navlink {

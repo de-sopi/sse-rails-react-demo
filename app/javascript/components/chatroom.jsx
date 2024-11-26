@@ -64,7 +64,7 @@ const Chatroom = () => {
 
   return (
   <div className='chatroom'>
-    <h1>Hi {currentUser}, welcome to the chatroom {chatroomName}</h1>
+    <h1>Hi {currentUser}, welcome to {chatroomName}</h1>
     <QrCode/>
     <ConfirmableTextInput confirm={sendMessage} buttonText={'send'} confirmText={"what's on your mind"}/>
     <div>

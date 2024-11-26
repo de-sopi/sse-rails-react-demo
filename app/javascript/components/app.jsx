@@ -14,8 +14,8 @@ const App = () => {
       <div>
         <nav className={'navbar'}>
           <Link to="/" className={'navlink'}>Home</Link>
-          <Link to="/time" className={'navlink'}>Example 1: Server Sends Time</Link>
-          <Link to="/chatrooms" className={'navlink'}>Example 2: Server Sends Chat Messages</Link>
+          <Link to="/time" className={'navlink'}>Server Sends Time</Link>
+          <Link to="/chatrooms" className={'navlink'}>Server Sends Chat</Link>
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />

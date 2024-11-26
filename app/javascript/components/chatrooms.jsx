@@ -59,7 +59,7 @@ const Chatrooms = () => {
             </div>)
           }
         </div>
-        { hasUserName && (
+        { false && hasUserName && (
           <div className='chatrooms-list'>
             <h2>Join Existing Chatrooms</h2>
             {chatrooms.map((item, index) => <div key={index} onDoubleClick={()=> {navigate(item.toString())}}>{item}</div>)}
