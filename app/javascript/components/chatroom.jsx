@@ -18,7 +18,7 @@ const Chatroom = () => {
       return
     }
 
-    const response = await fetch(new URL('http://localhost:3000/api/messages'), {
+    const response = await fetch(new URL(`${window.location.host}/api/messages`), {
       method: 'post',
       headers: {
         'Accept': 'application/json',
